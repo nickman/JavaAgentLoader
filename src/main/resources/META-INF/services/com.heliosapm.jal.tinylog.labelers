@@ -1,0 +1,3 @@
+com.heliosapm.jal.tinylog.labelers.CountLabeler
+com.heliosapm.jal.tinylog.labelers.TimestampLabeler
+com.heliosapm.jal.tinylog.labelers.ProcessIdLabeler

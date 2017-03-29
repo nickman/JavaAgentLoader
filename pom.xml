@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.heliosapm</groupId>
+	<artifactId>java-agent-loader</artifactId>
+	<packaging>jar</packaging>
+	<version>1.0-SNAPSHOT</version>
+	<name>JavaAgentLoader</name>
+	<description>Java Agent with minimal footprint to load other java agents in an isolated class loader</description>
+	<inceptionYear>2017</inceptionYear>
+	<url>https://github.com/nickman/JavaAgentLoader</url>
+	<properties>
+  	<!-- Misc -->
+ 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+ 		<compiler-source.version>1.6</compiler-source.version>
+ 		<compiler-target.version>1.6</compiler-target.version>
+ 		<!-- Dependencies -->
+ 		<junit.version>4.12</junit.version>		
+		<!-- Plugin Versions -->
+		<jar-plugin.version>2.3</jar-plugin.version>
+		<compiler-plugin.version>2.0.2</compiler-plugin.version>
+		<source-plugin.version>2.2.1</source-plugin.version>
+		<javadoc-plugin.version>2.9.1</javadoc-plugin.version>
+		<jar-plugin.version>2.4</jar-plugin.version>
+		<eclipse-plugin.version>2.9</eclipse-plugin.version>
+		<surefire.version>2.16</surefire.version>
+		<gpg-plugin.version>1.6</gpg-plugin.version>
+		<release-plugin.version>2.5.3</release-plugin.version>
+		<staging-plugin.version>1.6.8</staging-plugin.version>
+	</properties>
+	
+	<distributionManagement>
+	  <snapshotRepository>
+	    <id>ossrh</id>
+	    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+	  </snapshotRepository>
+	  <repository>
+	    <id>ossrh</id>
+	    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+	  </repository>
+	</distributionManagement>
+	
+  <scm>
+    <connection>scm:git:git@github.com:nickman/JavaAgentLoader.git</connection>
+    <url>https://github.com/nickman/JavaAgentLoader</url>
+  </scm>
+  
+  <developers>
+    <developer>
+      <id>nwhitehead</id>
+      <name>Nicholas Whitehead</name>
+      <email>whitehead.nicholas@gmail.com</email>
+      <roles>
+        <role>developer</role>
+      </roles>
+      <timezone>-5</timezone>
+    </developer>
+  </developers>
+  
+  <licenses>
+    <license>
+      <name>Apache 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>  
+  
+	<dependencies>
+		<!--   TEST   -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		
+	</dependencies>
+
+	<build>
+		<defaultGoal>install</defaultGoal>
+		<plugins>
+
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-eclipse-plugin</artifactId>
+			<version>${eclipse-plugin.version}</version>
+			<configuration>
+			    <downloadJavadocs>true</downloadJavadocs>
+			    <downloadSources>true</downloadSources>
+			    <classpathContainers>
+			    </classpathContainers>
+			</configuration>
+		</plugin>
+			
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-compiler-plugin</artifactId>
+			<version>${compiler-plugin.version}</version>
+			<configuration>
+					<source>${compiler-source.version}</source>
+				<target>${compiler-target.version}</target>
+			</configuration>
+		</plugin>
+
+       	<plugin>
+		  <groupId>org.apache.maven.plugins</groupId>
+		  <artifactId>maven-jar-plugin</artifactId>
+		  <version>${jar-plugin.version}</version>		  		
+		  <configuration>
+		  	<archive>
+		  		<index>true</index>
+		  		<compress>true</compress>
+		  		<manifest>
+		  			<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+		  			<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+		  			<mainClass>com.heliosapm.jal.JALMain</mainClass>
+		  		</manifest>
+		  		<manifestEntries>
+		  			<Premain-Class>com.heliosapm.jal.JavaAgent</Premain-Class>
+		  			<Agent-Class>com.heliosapm.jal.JavaAgent</Agent-Class>
+		  			<Can-Redefine-Classes>true</Can-Redefine-Classes>
+		  			<Can-Retransform-Classes>true</Can-Retransform-Classes>
+		  			<Can-Set-Native-Method-Prefix>true</Can-Set-Native-Method-Prefix>
+		  		</manifestEntries>
+		  	</archive>
+		  </configuration>
+         </plugin>
+    
+	    <plugin>
+	      <groupId>org.apache.maven.plugins</groupId>
+	      <artifactId>maven-gpg-plugin</artifactId>
+	      <version>${gpg-plugin.version}</version>
+	      <executions>
+	        <execution>
+	          <id>sign-artifacts</id>
+	          <phase>verify</phase>
+	          <goals>
+	            <goal>sign</goal>
+	          </goals>
+	        </execution>
+	      </executions>
+	    </plugin>
+    
+	<plugin>
+	  <groupId>org.apache.maven.plugins</groupId>
+	  <artifactId>maven-release-plugin</artifactId>
+	  <version>${release-plugin.version}</version>
+	  <configuration>
+	    <autoVersionSubmodules>true</autoVersionSubmodules>
+	    <useReleaseProfile>false</useReleaseProfile>	    
+	    <!-- <releaseProfiles>release</releaseProfiles> -->
+	    <goals>deploy</goals>
+	  </configuration>
+	</plugin>
+	
+	<plugin>
+	  <groupId>org.sonatype.plugins</groupId>
+	  <artifactId>nexus-staging-maven-plugin</artifactId>
+	  <version>${staging-plugin.version}</version>
+	  <extensions>true</extensions>
+	  <configuration>
+	     <serverId>ossrh</serverId>
+	     <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+	     <autoReleaseAfterClose>true</autoReleaseAfterClose>
+	  </configuration>
+	</plugin>
+	
+                	
+      
+    <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-source-plugin</artifactId>
+      <version>${source-plugin.version}</version>
+      <executions>
+        <execution>
+          <id>attach-sources</id>
+          <goals>
+            <goal>jar-no-fork</goal>
+          </goals>
+        </execution>
+      </executions>
+    </plugin>
+
+    <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-javadoc-plugin</artifactId>
+      <version>${javadoc-plugin.version}</version>
+	  <configuration>
+        <!-- <additionalparam>-Xdoclint:none</additionalparam> -->
+      </configuration>      
+      <executions>
+        <execution>
+          <id>attach-javadocs</id>
+          <goals>
+            <goal>jar</goal>
+          </goals>
+        </execution>
+      </executions>
+    </plugin>
+          
+            				
+		</plugins>
+	</build>
+</project>

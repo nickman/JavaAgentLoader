@@ -1,0 +1,8 @@
+com.heliosapm.jal.tinylog.policies.StartupPolicy
+com.heliosapm.jal.tinylog.policies.CountPolicy
+com.heliosapm.jal.tinylog.policies.SizePolicy
+com.heliosapm.jal.tinylog.policies.HourlyPolicy
+com.heliosapm.jal.tinylog.policies.DailyPolicy
+com.heliosapm.jal.tinylog.policies.WeeklyPolicy
+com.heliosapm.jal.tinylog.policies.MonthlyPolicy
+com.heliosapm.jal.tinylog.policies.YearlyPolicy

@@ -1,0 +1,5 @@
+com.heliosapm.jal.tinylog.writers.ConsoleWriter
+com.heliosapm.jal.tinylog.writers.FileWriter
+com.heliosapm.jal.tinylog.writers.JdbcWriter
+com.heliosapm.jal.tinylog.writers.RollingFileWriter
+com.heliosapm.jal.tinylog.writers.SharedFileWriter
