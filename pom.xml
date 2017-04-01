@@ -141,6 +141,7 @@
 	      </executions>
 	    </plugin>
     
+    <!--
 	<plugin>
 	  <groupId>org.apache.maven.plugins</groupId>
 	  <artifactId>maven-release-plugin</artifactId>
@@ -148,7 +149,7 @@
 	  <configuration>
 	    <autoVersionSubmodules>true</autoVersionSubmodules>
 	    <useReleaseProfile>false</useReleaseProfile>	    
-	    <!-- <releaseProfiles>release</releaseProfiles> -->
+	    
 	    <goals>deploy</goals>
 	  </configuration>
 	</plugin>
@@ -164,7 +165,7 @@
 	     <autoReleaseAfterClose>true</autoReleaseAfterClose>
 	  </configuration>
 	</plugin>
-	
+	-->
                 	
       
     <plugin>
@@ -186,7 +187,7 @@
       <artifactId>maven-javadoc-plugin</artifactId>
       <version>${javadoc-plugin.version}</version>
 	  <configuration>
-        <!-- <additionalparam>-Xdoclint:none</additionalparam> -->
+        <additionalparam>-Xdoclint:none</additionalparam>
       </configuration>      
       <executions>
         <execution>

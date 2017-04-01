@@ -18,7 +18,6 @@ under the License.
  */
 package com.heliosapm.shorthand.attach.agent.installer;
 
-import java.io.File;
 import java.io.InputStream;
 import java.lang.instrument.Instrumentation;
 import java.net.URL;
@@ -38,9 +37,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-import com.heliosapm.utils.classload.IsolatedClassLoader;
-import com.heliosapm.utils.jar.JarBuilder;
-import com.heliosapm.utils.jar.ResourceMerger;
+import com.heliosapm.jal.utils.IsolatedClassLoader;
 
 
 /**
@@ -132,42 +129,42 @@ public class GenericAgentInstaller {
 				url);		
 	}
 	
-	public static File generateSharedClassJar(final ClassLoader classLoader) {
-		InputStream specInputStream = null;
-		try {
-			specInputStream = classLoader.getResourceAsStream(SHARED_CLASS_SPEC);
-			if(specInputStream!=null) {				
-				final Node rootNode = parseXML(specInputStream);
-				final String spec = getAttributeValueByName(rootNode, "spec");
-				final String jarPrefix = getAttributeValueByName(rootNode, "jarprefix");
-				final List<String[]> resources = new ArrayList<String[]>();
-				final List<String> mergers = new ArrayList<String>();
-				for(Node rNode: getChildNodesByName(rootNode, "resource", false)) {
-					resources.add(new String[]{getAttributeValueByName(rNode, "name"), "" + getAttributeBoolByName(rNode, "recurse")});
-				}
-				for(Node mNode: getChildNodesByName(rootNode, "merger", false)) {
-					mergers.add(getAttributeValueByName(mNode, "class"));
-				}
-				JarBuilder jb = new JarBuilder(File.createTempFile(jarPrefix + "-stub-", ".jar"), true)
-						.manifestBuilder()
-						.specTitle(spec==null ? ("Shared Class Stub Jar [" + jarPrefix + "]") : spec)
-						.done();
-				for(String[] rez: resources) {
-					final boolean recurse = Boolean.parseBoolean(rez[1]);
-					jb.res(rez[0]).classLoader(classLoader).recurse(recurse).apply();
-				}
-				for(String merg: mergers) {
-					jb.addResourceMerger((ResourceMerger)Class.forName(merg, true, classLoader).newInstance());
-				}
-				File f = jb.build();
-				log.log(Level.FINER, "Stub Jar:" + f);
-				return f;
-			}
-			return null;
-		} catch (Exception ex) {
-			throw new RuntimeException("Failed to create agent stub jar", ex);
-		}
-	}
+//	public static File generateSharedClassJar(final ClassLoader classLoader) {
+//		InputStream specInputStream = null;
+//		try {
+//			specInputStream = classLoader.getResourceAsStream(SHARED_CLASS_SPEC);
+//			if(specInputStream!=null) {				
+//				final Node rootNode = parseXML(specInputStream);
+//				final String spec = getAttributeValueByName(rootNode, "spec");
+//				final String jarPrefix = getAttributeValueByName(rootNode, "jarprefix");
+//				final List<String[]> resources = new ArrayList<String[]>();
+//				final List<String> mergers = new ArrayList<String>();
+//				for(Node rNode: getChildNodesByName(rootNode, "resource", false)) {
+//					resources.add(new String[]{getAttributeValueByName(rNode, "name"), "" + getAttributeBoolByName(rNode, "recurse")});
+//				}
+//				for(Node mNode: getChildNodesByName(rootNode, "merger", false)) {
+//					mergers.add(getAttributeValueByName(mNode, "class"));
+//				}
+//				JarBuilder jb = new JarBuilder(File.createTempFile(jarPrefix + "-stub-", ".jar"), true)
+//						.manifestBuilder()
+//						.specTitle(spec==null ? ("Shared Class Stub Jar [" + jarPrefix + "]") : spec)
+//						.done();
+//				for(String[] rez: resources) {
+//					final boolean recurse = Boolean.parseBoolean(rez[1]);
+//					jb.res(rez[0]).classLoader(classLoader).recurse(recurse).apply();
+//				}
+//				for(String merg: mergers) {
+//					jb.addResourceMerger((ResourceMerger)Class.forName(merg, true, classLoader).newInstance());
+//				}
+//				File f = jb.build();
+//				log.log(Level.FINER, "Stub Jar:" + f);
+//				return f;
+//			}
+//			return null;
+//		} catch (Exception ex) {
+//			throw new RuntimeException("Failed to create agent stub jar", ex);
+//		}
+//	}
 	
 	/**
 	 * Creates a JMX ObjectName
